@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatroom.dao.UserDao">
+
+    <sql id="property">
+        pid,pname,username,sex,birthday,age,phone
+    </sql>
+    <!--插入，注册-->
+    <insert id="registerUser">
+        insert into user(pid,pname,username,password,sex,birthday,age,phone)
+        value (#{user.pid},#{user.pname},#{user.username},#{user.password},#{user.sex},#{user.birthday},#{user.age},#{user.phone})
+    </insert>
+
+    <select id="allUsers" resultType="com.chatroom.entity.User">
+        select <include refid="property"/> from user
+        <if test="username != null and password != null">
+            where username = #{username} and password = #{password}
+        </if>
+    </select>
+
+    <!--根据pid 或者username查找-->
+    <select id="getUser" resultType="com.chatroom.entity.User" parameterType="java.lang.String">
+        select <include refid="property"/> from user where pid = #{property} || username = #{property}
+    </select>
+
+
+</mapper>

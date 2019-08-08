@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>提示页面</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(function(){
+        	//轮训函数
+        	var time = 2; 
+        	setInterval(function(){
+        		if(time > 0){
+        			$("#time").empty();
+        			$("#time").append(time);
+        			time = time - 1;
+        		}else{
+        			window.location.href = "/toreg";
+        		}
+        		
+        	},1000);
+        })
+    </script>
+</head>
+<body>
+	<header style="text-indent: 2em; margin-top: 30px;">
+        注册失败，请重新注册。<span id="time" style="font-size: 15px;">3</span>秒后跳转到注册页面。（如果为跳转或不想等待，请点击<a href="/toreg" title="点击访问">这里</a>）
+    </header>
+</body>
+</html>

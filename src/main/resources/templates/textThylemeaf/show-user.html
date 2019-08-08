@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息的显示</title>
+</head>
+<body>
+    <div>
+        <table style="border: 2px #0096e6 solid">
+            <thead>
+                <td>编号</td>
+                <td>pid</td>
+                <td>用户姓名</td>
+                <td>用户名</td>
+                <td>性别</td>
+                <td>手机号</td>
+            </thead>
+            <tbody>
+                <tr th:each="user , iterStat : ${users}">
+                    <td th:text="${iterStat.count}"></td>
+                    <td th:text="${user.pid}"></td>
+                    <td th:text="${user.pname}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td> <span th:if="${user.sex} == 0">男</span> <span th:if="${user.sex} == 1">女</span></td>
+                    <td th:text="${user.phone}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</body>
+</html>

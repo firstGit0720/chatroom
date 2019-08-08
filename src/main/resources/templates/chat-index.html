@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>聊天窗口界面</title>
+
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet"/>
+<link rel="stylesheet" href="css/reset.min.css" th:href="@{/css/reset.min.css}" />
+<link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="container">
+        <div class="left">
+            <div class="top">
+                <input type="text" placeholder="Search" />
+                <a href="javascript:;" class="search"></a>
+            </div>
+            <ul class="people" >
+                <li class="person" th:each="friend ,iterStat : ${firends}" onclick="tofriend(123456)">
+                    <img src="img/attachment.png" alt="" />
+                    <span class="name" th:text="${friend.get('pname')}"></span>
+                </li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
+            <div class="chat" data-chat="person2">
+                <div class="conversation-start">
+                    <span>Today, 5:38 PM</span>
+                </div>
+
+                <div class="bubble me">
+                    i splick
+                </div>
+
+                <div class="bubble you">
+                    I'm in California dreaming
+                </div>
+
+            </div>
+            <div class="write">
+                <a href="javascript:;" class="write-link attach"></a>
+                <input type="text" />
+                <a href="javascript:;" class="write-link smiley"></a>
+                <a href="javascript:;" class="write-link send"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script  src="js/index.js" th:src="@{/js/index.js}"></script>
+
+<div style="text-align:center;margin:1px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p>适用浏览器：360、FireFox、Chrome、Opera、傲游、搜狗、世界之窗. 不支持Safari、IE8及以下浏览器。</p>
+<p>来源：<a href="http://sc.chinaz.com/" target="_blank">站长素材</a></p>
+</div>
+</body>
+</html>
