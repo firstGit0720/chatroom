@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chatroom.dao.MessageDao">
+
+    <sql id="property">
+        sendId,sendTime,receiveId,message,readStatus
+    </sql>
+    <!--插入，注册-->
+    <insert id="insterMessage" parameterType="com.chatroom.entity.Message">
+        insert into message(<include refid="property"/>)
+        value (#{message.sendId},#{message.sendTime},#{message.receiveId},#{message.message},#{message.readStatus})
+    </insert>
+
+
+</mapper>

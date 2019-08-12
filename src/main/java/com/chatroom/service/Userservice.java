@@ -34,4 +34,12 @@ public interface Userservice {
      */
     public boolean login(String username, String password);
 
+    /**
+     * 修改在线状态
+     * @param status
+     * @param username
+     * @return
+     */
+    public boolean updateStatus(Integer status, String username);
+
 }

@@ -83,6 +83,11 @@ public class UserServiceImpl implements Userservice {
         return false;
     }
 
+    @Override
+    public boolean updateStatus(Integer status, String username) {
+        return userDao.updateStatus(status, username);
+    }
+
     /**判断用户密码是否正确
      *newpasswd 用户输入的密码
      *oldpasswd 正确密码*/

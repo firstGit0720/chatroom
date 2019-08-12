@@ -1,5 +1,6 @@
 package com.chatroom.service;
 
+import com.chatroom.entity.Message;
 import com.chatroom.entity.User;
 
 import java.util.List;
@@ -10,5 +11,7 @@ import java.util.Map;
  */
 public interface RelationService {
 
-    public List<Map<String,String>> allFriends(String pid);
+    public List<Map<String,String>> allFriends(String pid,Integer status);
+    public List<User> getFriends(String pid,Integer status);
+    public boolean insterMessage(Message message);
 }

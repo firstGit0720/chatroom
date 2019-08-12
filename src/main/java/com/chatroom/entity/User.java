@@ -19,6 +19,7 @@ public class User {
     private Date birthday;
     private Integer age;
     private String phone;
+    private Integer status;
 
     public String getPid() {
         return pid;
@@ -111,5 +112,13 @@ public class User {
                 ", age=" + age +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

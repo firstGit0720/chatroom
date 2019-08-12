@@ -3,7 +3,7 @@
 <mapper namespace="com.chatroom.dao.UserDao">
 
     <sql id="property">
-        pid,pname,username,sex,birthday,age,phone
+        pid,pname,username,sex,birthday,age,phone,status
     </sql>
     <!--插入，注册-->
     <insert id="registerUser">
@@ -22,6 +22,12 @@
     <select id="getUser" resultType="com.chatroom.entity.User" parameterType="java.lang.String">
         select <include refid="property"/> from user where pid = #{property} || username = #{property}
     </select>
+    <!--修改在线状态-->
+    <update id="updateStatus">
+        update user
+        set status = #{status}
+        where username = #{username}
+    </update>
 
 
 </mapper>

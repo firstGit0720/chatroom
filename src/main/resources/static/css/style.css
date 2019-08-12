@@ -192,8 +192,6 @@ body {
 }
 .container .right .chat {
   position: relative;
-  display: none;
-  overflow: hidden;
   padding: 0 35px 92px;
   border-width: 1px 1px 1px 0;
   border-style: solid;

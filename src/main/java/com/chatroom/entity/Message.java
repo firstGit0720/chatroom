@@ -7,20 +7,11 @@ import java.util.Date;
  */
 public class Message {
 
-    private Integer id;
     private String sendId;
     private Date sendTime;
     private String receiveId;
-    private String Message;
-    private Integer readStatus;  //阅读状态0：未阅 1 已阅
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private String message;
+    private Integer readStatus;  //阅读状态0：不在线未阅， 1 已阅,2：在线未阅
 
     public String getSendId() {
         return sendId;
@@ -46,13 +37,7 @@ public class Message {
         this.receiveId = receiveId;
     }
 
-    public String getMessage() {
-        return Message;
-    }
 
-    public void setMessage(String message) {
-        Message = message;
-    }
 
     public Integer getReadStatus() {
         return readStatus;
@@ -60,5 +45,24 @@ public class Message {
 
     public void setReadStatus(Integer readStatus) {
         this.readStatus = readStatus;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "sendId='" + sendId + '\'' +
+                ", sendTime=" + sendTime +
+                ", receiveId='" + receiveId + '\'' +
+                ", message='" + message + '\'' +
+                ", readStatus=" + readStatus +
+                '}';
     }
 }

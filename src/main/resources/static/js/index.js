@@ -1,4 +1,4 @@
-document.querySelector('.chat[data-chat=person2]').classList.add('active-chat');
+/*document.querySelector('.chat[data-chat=person2]').classList.add('active-chat');
 document.querySelector('.person[data-chat=person2]').classList.add('active');
 
 var friends = {
@@ -28,8 +28,4 @@ function setAciveChat(f) {
   chat.container.querySelector('[data-chat="' + chat.person + '"]').classList.add('active-chat');
   friends.name = f.querySelector('.name').innerText;
   chat.name.innerHTML = friends.name;
-}
-
-var tofriend = function (pid){
-    alert(pid)
-}
+}*/

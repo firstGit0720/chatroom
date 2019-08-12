@@ -29,4 +29,12 @@ public interface UserDao {
      */
     public User getUser(Object property);
 
+    /**
+     * 修改在线状态
+     * @param status
+     * @param username
+     * @return
+     */
+    public boolean updateStatus(@Param("status") Integer status,@Param("username") String username);
+
 }

@@ -4,10 +4,12 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>聊天窗口界面</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/reset.min.css" th:href="@{/css/reset.min.css}" />
+    <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
 
-<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet"/>
-<link rel="stylesheet" href="css/reset.min.css" th:href="@{/css/reset.min.css}" />
-<link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
 </head>
 <body>
 
@@ -18,16 +20,16 @@
                 <input type="text" placeholder="Search" />
                 <a href="javascript:;" class="search"></a>
             </div>
+            <input type="hidden" id="userpid"  th:value="${userpid}" />
             <ul class="people" >
-                <li class="person" th:each="friend ,iterStat : ${firends}" onclick="tofriend(123456)">
-                    <img src="img/attachment.png" alt="" />
-                    <span class="name" th:text="${friend.get('pname')}"></span>
+                <li class="person" th:each="friend ,iterStat : ${firends}" th:onclick="getname([[${friend}]])">
+                    <span class="name" th:text="${friend.pname}"></span>(<span class="name" th:text="${friend.pid}"></span>)
                 </li>
             </ul>
         </div>
-        <div class="right">
-            <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
-            <div class="chat" data-chat="person2">
+        <div id="showDiv" class="right" hidden>
+            <div class="top"><span>To: <span class="name" id="toUser"></span></span></div>
+            <div class="chat" style=" overflow:scroll;" id="message">
                 <div class="conversation-start">
                     <span>Today, 5:38 PM</span>
                 </div>
@@ -43,19 +45,29 @@
             </div>
             <div class="write">
                 <a href="javascript:;" class="write-link attach"></a>
-                <input type="text" />
+                <input type="text"  id="content" />
                 <a href="javascript:;" class="write-link smiley"></a>
-                <a href="javascript:;" class="write-link send"></a>
+                <a href="javascript:;" class="write-link send" id="sendMsg"></a>
             </div>
         </div>
     </div>
 </div>
 
-<script  src="js/index.js" th:src="@{/js/index.js}"></script>
+<script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
 
 <div style="text-align:center;margin:1px 0; font:normal 14px/24px 'MicroSoft YaHei';">
 <p>适用浏览器：360、FireFox、Chrome、Opera、傲游、搜狗、世界之窗. 不支持Safari、IE8及以下浏览器。</p>
 <p>来源：<a href="http://sc.chinaz.com/" target="_blank">站长素材</a></p>
 </div>
+<script type="text/javascript">
+    var receiveId;
+    function getname(user){
+        $("#showDiv").attr("hidden" , false)
+        receiveId = user.pid
+        $("#toUser").empty()
+        $("#toUser").append(user.pname)
+        console.info(user)
+    }
+</script>
 </body>
 </html>
