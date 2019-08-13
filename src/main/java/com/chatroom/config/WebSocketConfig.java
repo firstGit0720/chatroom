@@ -13,7 +13,9 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
-
+/**
+ * websocket的配置类，用于注入信息和功能启动
+ */
 @Configuration
 public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocketConfigurer {
     @Override
@@ -39,8 +41,9 @@ public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocke
     }
 
     @Autowired
-    public void setMessageService(RelationService relationService){
+    public void setMessageService(RelationService relationService,MessageService messageService){
         WebSocketController.relationService = relationService;
+        WebSocketController.messageService = messageService;
     }
 
 }

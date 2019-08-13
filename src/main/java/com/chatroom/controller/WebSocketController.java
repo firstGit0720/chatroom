@@ -39,6 +39,7 @@ public class WebSocketController {
     private static Map<String,List<User>> friendsMap = new ConcurrentHashMap<String,List<User>>();
 
     public static RelationService relationService;
+    public static MessageService messageService;
 
     /**
      * 查找他所有在线的好友
@@ -83,7 +84,7 @@ public class WebSocketController {
            }
         }
         System.out.println(messageStr.toString());
-        if (relationService.insterMessage(messageStr)){
+        if (messageService.insterMessage(messageStr)){
             //存入到数据库并发送至前端
             sendTextAll(messageStr.getSendId(),messageStr.getReceiveId(),JSONObject.toJSONString(messageStr));
         }

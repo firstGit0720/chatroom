@@ -1,9 +1,7 @@
 $(function () {
     var path = window.location.href.substring(0,21);
-
-    console.info(path)
     var pid = $("#userpid").val()
-//连接webSocket
+    //连接webSocket
     var websocket;
     if ('WebSocket' in window) {
         websocket = new WebSocket("ws://localhost:8080/chat-room/"+pid);
@@ -14,7 +12,7 @@ $(function () {
     }
     websocket.onopen = function(event) {
         console.log("WebSocket:已连接");
-        console.log(event);
+        // console.log(event);
     };
     websocket.onmessage = function(event) {
         var data=JSON.parse(event.data);
@@ -28,23 +26,22 @@ $(function () {
     };
     websocket.onerror = function(event) {
         console.log("WebSocket:发生错误 ");
-        console.log(event);
+        // console.log(event);
     };
     websocket.onclose = function(event) {
         console.log("WebSocket:已关闭");
-        console.log(event);
+        // console.log(event);
     }
     function sendMsg (){
         var v=$("#content").val();
         if(v==""){
-            return;
+            alert("消息内容不能为空！");
         }else{
             var data={};
             data["sendId"]=pid;
             data["receiveId"]=receiveId;
             data["message"]=v;
             websocket.send(JSON.stringify(data));
-            // $("#message").append("<div class='bubble me'>"+new Date().Format("yyyy-MM-dd hh:mm:ss")+"<br>"+v+"</div>");
             scrollToBottom();
             $("#content").val("");
         }
@@ -69,18 +66,6 @@ $(function () {
         for (var k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
-    }
-
-    function send(event){
-        var code;
-        if(window.event){
-            code = window.event.keyCode; // IE
-        }else{
-            code = e.which; // Firefox
-        }
-        if(code==13){
-            sendMsg();
-        }
     }
 
     function clearAll(){

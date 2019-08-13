@@ -11,5 +11,15 @@
         value (#{message.sendId},#{message.sendTime},#{message.receiveId},#{message.message},#{message.readStatus})
     </insert>
 
+    <select id="messageLists" resultType="com.chatroom.entity.Message">
+        select <include refid="property" /> from message
+        where (sendId = #{sendId} and receiveId = #{receiveId})
+        or (sendId = #{receiveId} and receiveId = #{sendId})
+        order by sendTime desc
+        <if test="start != null and end != null" >
+            limit #{start} , #{end}
+        </if>
+    </select>
+
 
 </mapper>

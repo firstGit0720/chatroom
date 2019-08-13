@@ -13,5 +13,5 @@ public interface RelationService {
 
     public List<Map<String,String>> allFriends(String pid,Integer status);
     public List<User> getFriends(String pid,Integer status);
-    public boolean insterMessage(Message message);
+
 }

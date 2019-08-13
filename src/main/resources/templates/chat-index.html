@@ -28,20 +28,8 @@
             </ul>
         </div>
         <div id="showDiv" class="right" hidden>
-            <div class="top"><span>To: <span class="name" id="toUser"></span></span></div>
-            <div class="chat" style=" overflow:scroll;" id="message">
-                <div class="conversation-start">
-                    <span>Today, 5:38 PM</span>
-                </div>
-
-                <div class="bubble me">
-                    i splick
-                </div>
-
-                <div class="bubble you">
-                    I'm in California dreaming
-                </div>
-
+            <div class="top"><span>To: <span class="name" style="align-content: center" id="toUser"></span></span></div>
+            <div class="chat" style="overflow-y: auto;" id="message">
             </div>
             <div class="write">
                 <a href="javascript:;" class="write-link attach"></a>
@@ -55,19 +43,46 @@
 
 <script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
 
-<div style="text-align:center;margin:1px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<!--<div style="text-align:center;margin:1px 0; font:normal 14px/24px 'MicroSoft YaHei';">
 <p>适用浏览器：360、FireFox、Chrome、Opera、傲游、搜狗、世界之窗. 不支持Safari、IE8及以下浏览器。</p>
 <p>来源：<a href="http://sc.chinaz.com/" target="_blank">站长素材</a></p>
-</div>
+</div>-->
 <script type="text/javascript">
     var receiveId;
+    var send = $("#userpid").val();
     function getname(user){
+        $("#message").empty()
         $("#showDiv").attr("hidden" , false)
         receiveId = user.pid
         $("#toUser").empty()
         $("#toUser").append(user.pname)
-        console.info(user)
+        //发送ajax请求，获取最近十条的信息
+        $.ajax({
+                url : "http://localhost:8080/msg/getMessage",
+                type : "get",
+                async : false,
+                data : {
+                    "sendId": send,
+                    "receiveId" : receiveId
+                },
+                success : function (resp) {
+                    console.info(resp)
+                    //将信息添加到上边
+                    for (var i = 0 ; i < resp.length ; i++){
+                        var divClass = send == resp[i].sendId ? "bubble me" : "bubble you";
+                        var strMessage = "<div class ='" + divClass + "'>" + new Date(resp[i].sendTime).Format("yyyy-MM-dd hh:mm:ss") + "<br>" + resp[i].message + "</div>"
+                        $("#message").append(strMessage)
+                    }
+                    var strTime = "<div class='conversation-start'> <span>"+ new Date().Format("yyyy-MM-dd hh:mm:ss") +"</span></div>"
+                    $("#message").append(strTime)
+                },
+                error : function (err) {
+                    
+                }
+            })
     }
+
+
 </script>
 </body>
 </html>

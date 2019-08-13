@@ -17,8 +17,7 @@ public class RelationServiceImpl implements RelationService {
 
     @Autowired
     private RelationDao relationDao;
-    @Autowired
-    private MessageDao messageDao;
+
 
 
     @Override
@@ -32,8 +31,5 @@ public class RelationServiceImpl implements RelationService {
     }
 
 
-    @Override
-    public boolean insterMessage(Message message) {
-        return messageDao.insterMessage(message);
-    }
+
 }
