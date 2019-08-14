@@ -1,6 +1,8 @@
 package com.chatroom.controller;
 
+import com.chatroom.entity.Message;
 import com.chatroom.entity.User;
+import com.chatroom.service.MessageService;
 import com.chatroom.service.RelationService;
 import com.chatroom.service.Userservice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserController {
     @Autowired
     private RelationService relationService;
 
+    @Autowired
+    private MessageService messageService;
+
     @RequestMapping(value = "/reg" , method = RequestMethod.POST)
     public String registerUser(User user){
         if (userservice.registerUser(user)){
@@ -48,11 +53,15 @@ public class UserController {
             User user = userservice.getUser(username);
             //修改在线的状态
             userservice.updateStatus(1,user.getUsername());
-            request.getSession().setAttribute("uid", user.getPid());
+            request.getSession().setAttribute("pid", user.getPid());
             //获取好友列表
             List<User> friends = relationService.getFriends(user.getPid(),null);
+            //获取好有请求信息
+            List<Message> messages = messageService.selectReqMsg(2,user.getPid());
             model.addAttribute("firends", friends);
+            model.addAttribute("imgurl",user.getImgurl());
             model.addAttribute("userpid", user.getPid());
+            model.addAttribute("reqMsg" , messages);
             return "chat-index";
         }else{
             model.addAttribute("msg","用户或密码错误请重新登录！");

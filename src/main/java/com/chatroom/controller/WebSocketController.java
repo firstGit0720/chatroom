@@ -83,7 +83,6 @@ public class WebSocketController {
                messageStr.setReadStatus(2);
            }
         }
-        System.out.println(messageStr.toString());
         if (messageService.insterMessage(messageStr)){
             //存入到数据库并发送至前端
             sendTextAll(messageStr.getSendId(),messageStr.getReceiveId(),JSONObject.toJSONString(messageStr));

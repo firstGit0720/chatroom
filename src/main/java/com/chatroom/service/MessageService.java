@@ -20,4 +20,22 @@ public interface MessageService {
      */
     public List<Message> messageLists(String sendId,String receiveId);
 
+    /**
+     * 添加好友
+     * @param myId
+     * @param friendId
+     * @return
+     */
+    public boolean addFriend(String myId,String friendId);
+
+    /**
+     * 查找好友请求信息
+     * @param msgStatus
+     * @param myId
+     * @return
+     */
+    public List<Message> selectReqMsg( Integer msgStatus,  String myId);
+
+
+
 }

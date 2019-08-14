@@ -7,9 +7,8 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet"/>
     <link rel="stylesheet" href="css/reset.min.css" th:href="@{/css/reset.min.css}" />
     <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
+    <script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
 </head>
 <body>
 
@@ -17,16 +16,30 @@
 	<div class="container">
         <div class="left">
             <div class="top">
-                <input type="text" placeholder="Search" />
-                <a href="javascript:;" class="search"></a>
+                <img th:src="${imgurl}" alt="http://localhost:8080/img/userportrait/default.jpg" onclick="updateImg()" />
+                <input type="text" placeholder="输入查询的用户名或ID" id="searchValue" />
+                <a href="javascript:;" class="search" onclick="searchFriend()"></a>
+                <!--<div class="dropdown">
+                <div class="dropdown-content">
+                    <ul>
+                        <li>修改头像</li>
+                        <li>修改资料</li>
+                        <li>添加好友</li>
+                    </ul>
+                </div>
+                </div>-->
             </div>
             <input type="hidden" id="userpid"  th:value="${userpid}" />
             <ul class="people" >
                 <li class="person" th:each="friend ,iterStat : ${firends}" th:onclick="getname([[${friend}]])">
-                    <span class="name" th:text="${friend.pname}"></span>(<span class="name" th:text="${friend.pid}"></span>)
+                    <img th:src="${friend.imgurl}" alt="http://localhost:8080/img/userportrait/default.jpg" /><span class="name" th:text="${friend.pname}"></span>
+                    <br><span class="name" th:text="${friend.pid}"></span>
                 </li>
             </ul>
         </div>
+
+
+
         <div id="showDiv" class="right" hidden>
             <div class="top"><span>To: <span class="name" style="align-content: center" id="toUser"></span></span></div>
             <div class="chat" style="overflow-y: auto;" id="message">
@@ -38,10 +51,27 @@
                 <a href="javascript:;" class="write-link send" id="sendMsg"></a>
             </div>
         </div>
+
+        <!--查找好友的div-->
+        <div class="thisBox" id="friendDiv" th:hidden="${reqMsg.size() == 0}">
+            <div class="thisBox1" >
+                <button onclick="jQuery('.thisBox').hide()" class="close">关闭</button>
+                    <div class='left' id="showFriend" style="width: 40%">
+                        <ul class='people' th:hidden="${reqMsg.size() == 0}">
+                            <li class='person' th:each="msg : ${reqMsg}">
+                                <span class='name' th:text="msg.message"></span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='okfriend([[${msg}]])'>同意</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='nofriend([[${msg}]])'>拒绝</a>
+                            </li>
+                        </ul>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
+
 
 <!--<div style="text-align:center;margin:1px 0; font:normal 14px/24px 'MicroSoft YaHei';">
 <p>适用浏览器：360、FireFox、Chrome、Opera、傲游、搜狗、世界之窗. 不支持Safari、IE8及以下浏览器。</p>
@@ -82,6 +112,58 @@
             })
     }
 
+    function updateImg(){
+        alert("修改头像")
+    }
+
+    function searchFriend(){
+        var value = $("#searchValue").val();
+        alert(value)
+        $.ajax({
+            url:"http://localhost:8080/selectfriends",
+            type:"get",
+            async:false,
+            data:{
+                "value" : value
+            },
+            success : function (resp) {
+                var str = "<ul class='people' >"
+                if (resp == null ||resp.length == 0){
+                    alert("查无此人")
+                } else{
+                    for(var i = 0; i < resp.length ; i++){
+                       str += "<li class='person'>"+
+                        "<img src='"+resp[i].imgurl+"' style='margin-top: -5px;' />" +
+                        "<span class='name'>"+resp[i].pname+"</span>"+
+                        "(<span class='name'>"+resp[i].pid+"</span> )"+
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='addfriend("+resp[i].pid+")'>添加好友</a>"+"</li>"
+                    }
+                    str += "</ul>"
+                    $("#showFriend").empty()
+                    $("#showFriend").append(str)
+                    $("#searchValue").val("")
+                }
+                $("#friendDiv").show()
+            }
+        })
+    }
+
+    function addfriend(id){
+        $.ajax({
+            url : "http://localhost:8080/addFriend",
+            type :"post",
+            async : false,
+            data :{
+                "myId" : send,
+                "friendId" : id
+            },
+            success : function (resp) {
+                alert(resp)
+            }
+        })
+
+        alert(id)
+    }
 
 </script>
 </body>

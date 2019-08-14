@@ -3,12 +3,12 @@
 <mapper namespace="com.chatroom.dao.UserDao">
 
     <sql id="property">
-        pid,pname,username,sex,birthday,age,phone,status
+        pid,pname,username,sex,birthday,age,phone,status,imgurl,nickname
     </sql>
     <!--插入，注册-->
     <insert id="registerUser">
-        insert into user(pid,pname,username,password,sex,birthday,age,phone)
-        value (#{user.pid},#{user.pname},#{user.username},#{user.password},#{user.sex},#{user.birthday},#{user.age},#{user.phone})
+        insert into user(pid,pname,username,password,sex,birthday,age,phone,imgurl,nickname)
+        value (#{user.pid},#{user.pname},#{user.username},#{user.password},#{user.sex},#{user.birthday},#{user.age},#{user.phone},#{user.imgurl},#{user.nickname})
     </insert>
 
     <select id="allUsers" resultType="com.chatroom.entity.User">

@@ -35,6 +35,18 @@ public class MsgController {
         return messageService.messageLists(sendId, receiveId);
     }
 
+    /**
+     * 添加好友
+     * @param myId
+     * @param friendId
+     * @return
+     */
+    @RequestMapping(value = "/addFriend" , method = RequestMethod.POST)
+    @ResponseBody
+    public boolean addFriend(@RequestParam("myId") String myId,@RequestParam("friendId") String friendId){
+        return messageService.addFriend(myId,friendId);
+    }
+
 
 
 }

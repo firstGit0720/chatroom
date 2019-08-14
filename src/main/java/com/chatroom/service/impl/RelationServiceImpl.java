@@ -1,12 +1,9 @@
 package com.chatroom.service.impl;
 
-import com.chatroom.dao.MessageDao;
 import com.chatroom.dao.RelationDao;
-import com.chatroom.entity.Message;
 import com.chatroom.entity.User;
 import com.chatroom.service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +27,15 @@ public class RelationServiceImpl implements RelationService {
         return relationDao.getFriends(pid, status);
     }
 
+    @Override
+    public List<Map<String, String>> selectFriend(String value) {
+        return relationDao.selectFriend(value);
+    }
+
+    @Override
+    public boolean isFriend(String myPid, String friendId) {
+        return relationDao.isFriend(myPid, friendId) == null ? true : false;
+    }
 
 
 }

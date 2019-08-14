@@ -3,23 +3,30 @@
 <mapper namespace="com.chatroom.dao.MessageDao">
 
     <sql id="property">
-        sendId,sendTime,receiveId,message,readStatus
+        sendId,sendTime,receiveId,message,readStatus,type
     </sql>
     <!--插入，注册-->
     <insert id="insterMessage" parameterType="com.chatroom.entity.Message">
         insert into message(<include refid="property"/>)
-        value (#{message.sendId},#{message.sendTime},#{message.receiveId},#{message.message},#{message.readStatus})
+        value (#{message.sendId},#{message.sendTime},#{message.receiveId},#{message.message},#{message.readStatus},#{message.type})
     </insert>
 
     <select id="messageLists" resultType="com.chatroom.entity.Message">
         select <include refid="property" /> from message
         where (sendId = #{sendId} and receiveId = #{receiveId})
         or (sendId = #{receiveId} and receiveId = #{sendId})
+        and type = 0
         order by sendTime desc
         <if test="start != null and end != null" >
             limit #{start} , #{end}
         </if>
     </select>
-
-
+    
+    <select id="selectReqMsg" resultType="com.chatroom.entity.Message">
+        select <include refid="property" /> from message m left join relation r on m.receiveId = r.friendId
+        where r.status = #{msgStatus} and m.receiveId = #{myId}
+    </select>
+    
+    
+    
 </mapper>

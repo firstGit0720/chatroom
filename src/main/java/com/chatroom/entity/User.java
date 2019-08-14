@@ -21,6 +21,9 @@ public class User {
     private String phone;
     private Integer status;
 
+    private String imgurl;
+    private String nickname;
+
     public String getPid() {
         return pid;
     }
@@ -120,5 +123,21 @@ public class User {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

@@ -38,7 +38,7 @@ body {
   position: relative;
   top: 50%;
   left: 50%;
-  width: 80%;
+  width: 85%;
   height: 75%;
   background-color: var(--white);
   -webkit-transform: translate(-50%, -50%);
@@ -57,6 +57,14 @@ body {
   height: 96px;
   padding: 29px;
 }
+
+.container .left .top img{
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  border-radius: 50%;
+}
 .container .left .top:after {
   position: absolute;
   bottom: 0;
@@ -71,7 +79,7 @@ body {
 }
 .container .left input {
   float: left;
-  width: 188px;
+  width: 155px;
   height: 42px;
   padding: 0 15px;
   border: 1px solid var(--light);
@@ -80,6 +88,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 400;
 }
+
 .container .left input:focus {
   outline: none;
 }
@@ -412,4 +421,29 @@ body {
     margin-right: 0;
     opacity: 1;
   }
+}
+/*下拉菜单*/
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/*头像样式*/
+.imgClass{
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  border-radius: 50%;
 }

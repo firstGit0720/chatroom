@@ -11,7 +11,8 @@ public class Message {
     private Date sendTime;
     private String receiveId;
     private String message;
-    private Integer readStatus;  //阅读状态0：不在线未阅， 1 已阅,2：在线未阅
+    private Integer readStatus;  //阅读状态0：不在线未阅， 1 已阅,2：在线未阅,3：好友请求信息
+    private Integer type = 0;  //信息的分类 0 ：普通信息，1好友请求信息
 
     public String getSendId() {
         return sendId;
@@ -64,5 +65,13 @@ public class Message {
                 ", message='" + message + '\'' +
                 ", readStatus=" + readStatus +
                 '}';
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

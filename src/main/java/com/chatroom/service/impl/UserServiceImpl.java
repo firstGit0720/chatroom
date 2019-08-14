@@ -5,6 +5,7 @@ import com.chatroom.entity.User;
 import com.chatroom.service.Userservice;
 import com.chatroom.utils.DateUtils;
 import com.chatroom.utils.EncryptionUtils;
+import com.chatroom.utils.ImgUtils;
 import com.chatroom.utils.RandomId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,10 @@ public class UserServiceImpl implements Userservice {
         //生成随机id
         user.setPid(randomId.getRandomId());
         user.setAge(dateUtils.getAge(user.getBirthday()));
-        System.out.println(user.toString());
+        user.setImgurl(ImgUtils.DEAFUL_IMG);
+        if (user.getNickname() == null || user.getNickname().length() == 0){
+            user.setNickname(user.getPname());
+        }
         return userDao.registerUser(user);
     }
 

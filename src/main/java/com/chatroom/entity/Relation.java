@@ -1,9 +1,15 @@
 package com.chatroom.entity;
 
+import java.io.Serializable;
+
 /**
  * 好友关系表
  */
-public class Relation {
+public class Relation implements Serializable {
+
+    public static final Integer STSTUS_CHECK = 0; //已发送了好友请求
+    public static final Integer STSTUS_OK= 1; //已是好友
+    public static final Integer STSTUS_NO = 2; //不是好友
 
     private Integer id;
     private String myId;

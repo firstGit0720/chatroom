@@ -5,6 +5,9 @@
     <sql id="property">
         pid,pname
     </sql>
+    <sql id="propertyAll">
+        id,myId,friendId,status
+    </sql>
 
     <resultMap id="friend" type="com.chatroom.entity.User">
         <id property="pid" column="pid"/>
@@ -24,6 +27,21 @@
         </if>
     </select>
 
+
+    <select id="selectFriend" resultType="java.util.HashMap">
+        select  pid,pname,imgurl from user where user.pid = #{value} or user.pname like concat(concat('%',#{value}),'%')
+        or user.nickname like concat(concat('%',#{value}),'%') or user.phone = #{value}
+    </select>
+
+
+    <select id="isFriend" resultType="com.chatroom.entity.Relation">
+        select <include refid="propertyAll" /> from relation r where r.myId= #{myPid} and r.friendId = #{friendId}
+    </select>
+
+    <insert id="addFriendPrem" parameterType="com.chatroom.entity.Relation">
+        insert into relation(myId,friendId,status)
+        value (#{relaction.myId},#{relaction.friendId},#{relaction.status})
+    </insert>
 
 
 </mapper>

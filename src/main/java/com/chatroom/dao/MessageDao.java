@@ -26,4 +26,13 @@ public interface MessageDao {
          */
         public List<Message> messageLists(@Param("sendId") String sendId,@Param("receiveId") String receiveId,@Param("start") Integer start , @Param("end") Integer end);
 
+        /**
+         * 查找好友请求信息
+         * @param msgStatus
+         * @param myId
+         * @return
+         */
+        public List<Message> selectReqMsg(@Param("msgStatus") Integer msgStatus,@Param("myId") String myId);
+
+
 }
