@@ -14,18 +14,16 @@ public interface RelationDao {
     /**
      * 获取好友信息
      * @param pid
-     * @param status
      * @return
      */
-    public List<Map<String,String>> allFriends(@Param("pid") String pid , @Param("status") Integer status);
+    public List<Map<String,String>> allFriends(@Param("pid") String pid );
 
     /**
      *
      * @param pid
-     * @param status
      * @return
      */
-    public List<User> getFriends(@Param("pid") String pid , @Param("status") Integer status);
+    public List<User> getFriends(@Param("pid") String pid );
 
     /**
      * 查找好友
@@ -48,5 +46,13 @@ public interface RelationDao {
      * @return
      */
     public boolean addFriendPrem(@Param("relaction") Relation relation);
+
+    /**
+     * 修改好友关系的状态
+     * @param relation
+     * @return
+     */
+    public boolean updateFriendStatus(@Param("relaction") Relation relation);
+
 
 }

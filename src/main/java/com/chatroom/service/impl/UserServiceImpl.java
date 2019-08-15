@@ -7,6 +7,7 @@ import com.chatroom.utils.DateUtils;
 import com.chatroom.utils.EncryptionUtils;
 import com.chatroom.utils.ImgUtils;
 import com.chatroom.utils.RandomId;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements Userservice {
-
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
     @Autowired
     private UserDao userDao;
 
@@ -38,11 +39,12 @@ public class UserServiceImpl implements Userservice {
     public boolean registerUser(User user) {
         //密码加密
         try {
+            logger.info("密码加密");
             user.setPassword(encryptionUtils.EncoderByMd5(user.getPassword()));
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            logger.info("密码加密失败" +  e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.info("密码加密失败" +  e.getMessage());
         }
         //生成随机id
         user.setPid(randomId.getRandomId());

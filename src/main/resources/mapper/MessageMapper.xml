@@ -13,9 +13,9 @@
 
     <select id="messageLists" resultType="com.chatroom.entity.Message">
         select <include refid="property" /> from message
-        where (sendId = #{sendId} and receiveId = #{receiveId})
+        where type = 0 and (sendId = #{sendId} and receiveId = #{receiveId})
         or (sendId = #{receiveId} and receiveId = #{sendId})
-        and type = 0
+
         order by sendTime desc
         <if test="start != null and end != null" >
             limit #{start} , #{end}
@@ -24,7 +24,7 @@
     
     <select id="selectReqMsg" resultType="com.chatroom.entity.Message">
         select <include refid="property" /> from message m left join relation r on m.receiveId = r.friendId
-        where r.status = #{msgStatus} and m.receiveId = #{myId}
+        where r.status = #{msgStatus} and m.receiveId = #{myId} and type = 0
     </select>
     
     

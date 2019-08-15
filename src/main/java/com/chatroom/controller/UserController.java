@@ -55,7 +55,7 @@ public class UserController {
             userservice.updateStatus(1,user.getUsername());
             request.getSession().setAttribute("pid", user.getPid());
             //获取好友列表
-            List<User> friends = relationService.getFriends(user.getPid(),null);
+            List<User> friends = relationService.getFriends(user.getPid());
             //获取好有请求信息
             List<Message> messages = messageService.selectReqMsg(2,user.getPid());
             model.addAttribute("firends", friends);

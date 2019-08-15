@@ -1,12 +1,12 @@
 package com.chatroom.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chatroom.entity.Message;
+import com.chatroom.entity.Relation;
 import com.chatroom.entity.User;
 import com.chatroom.service.MessageService;
 import com.chatroom.service.RelationService;
-import com.google.gson.JsonObject;
+import com.chatroom.service.Userservice;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -35,11 +34,12 @@ public class WebSocketController {
      *        就可能会导致Session无法被有效清除，livingSessions会越来越大，服务器压力也会越来越大。
      *        所以，我们需要周期性的去检查用户是否还处于活跃状态，不活跃的，移除该用户的session
      */
-    private static Map<String , Session> livingSessions = new ConcurrentHashMap<String , Session>();
-    private static Map<String,List<User>> friendsMap = new ConcurrentHashMap<String,List<User>>();
+    private static Map<String , Session> livingSessions = new ConcurrentHashMap<String , Session>();  //当前在线好友
+    private static Map<String,List<User>> friendsMap = new ConcurrentHashMap<String,List<User>>();  //好友人数
 
     public static RelationService relationService;
     public static MessageService messageService;
+    public static Userservice userservice;
 
     /**
      * 查找他所有在线的好友
@@ -47,7 +47,7 @@ public class WebSocketController {
      * @return
      */
     public List<User> getFriends(String userpid){
-        return relationService.getFriends(userpid,null);
+        return relationService.getFriends(userpid);
     }
     /**
      * 前端一旦启用WebSocket,机会调用@OnOpen注解标注的方法
@@ -60,7 +60,6 @@ public class WebSocketController {
         //将好友放到列表中，便于之后的消息的发送
         List<User> friendList = this.getFriends(userpid);
         friendsMap.put(userpid,friendList);
-        System.out.println(friendList.size());
     }
 
     /**
@@ -74,19 +73,45 @@ public class WebSocketController {
        //将信息添加到数据库
         Message messageStr = JSONObject.parseObject(message,Message.class);
         messageStr.setSendTime(new Date());
-        //首先获取好友从list中判断，该用户是否在在线
+        //首先获取好友从list中判断
         List<User> friendList = friendsMap.get(userpid);
-        for(User user : friendList){
-           if(user.getStatus() == 0){//不在线
-               messageStr.setReadStatus(0);
-           }else{
-               messageStr.setReadStatus(2);
-           }
+        //通过在线人数的session判断是否在线
+        Session checkSession = livingSessions.get(messageStr.getReceiveId());
+        if (checkSession == null){
+            //不在线
+            messageStr.setReadStatus(0);
+        }else {
+            messageStr.setReadStatus(2);
         }
-        if (messageService.insterMessage(messageStr)){
-            //存入到数据库并发送至前端
-            sendTextAll(messageStr.getSendId(),messageStr.getReceiveId(),JSONObject.toJSONString(messageStr));
+
+        if(messageStr.getType()!= 1){  //普通消息
+            if (messageService.insterMessage(messageStr)){
+                //存入到数据库并发送至前端
+                sendTextAll(messageStr.getSendId(),messageStr.getReceiveId(),JSONObject.toJSONString(messageStr));
+            }
+        }else{  //好友验证消息
+            //获取我的信息
+            User user = userservice.getUser(userpid);
+            String strMsg = "用户" + user.getNickname() + "(" + userpid + "),请求添加好友，是否通过？" ;
+            messageStr.setMessage(strMsg);
+            if (messageService.insterMessage(messageStr)){
+                Relation relation = new Relation();
+                relation.setFriendId(messageStr.getReceiveId());
+                relation.setMyId(userpid);
+                relation.setStatus(Relation.STSTUS_CHECK);
+                if(relationService.addFriendPrem(relation)){
+                    //将消息发送给好友
+                    //查找Session,如果在线session不为空，否则为空
+                    Session session1 = livingSessions.get(messageStr.getReceiveId());
+                    if(session1 != null){  //在线发送
+                        sendText(session1,JSONObject.toJSONString(messageStr));
+                    }
+                }
+            }
         }
+
+
+
     }
 
     /**

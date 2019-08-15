@@ -1,6 +1,6 @@
-$(function () {
-    var path = window.location.href.substring(0,21);
     var pid = $("#userpid").val()
+    var path = window.location.href.substring(0,21);
+console.info(pid)
     //连接webSocket
     var websocket;
     if ('WebSocket' in window) {
@@ -17,13 +17,50 @@ $(function () {
     websocket.onmessage = function(event) {
         var data=JSON.parse(event.data);
         console.log("WebSocket:收到一条消息",data);
+        if(data.type == 0){  //普通消息
+            var textCss=data.sendId== pid ?"bubble me":"bubble you";
+            var str = "<div class='"+textCss+"'>"+ new Date(data.sendTime).Format("yyyy-MM-dd hh:mm:ss") + "<br/>" + data.message +"</div>"
+            $("#message").append(str);
+            scrollToBottom();
+        }else if(data.type == 1){  //好友验证消息
+            var ok = "对方通过了您的请求！"
+            var no = "对方拒绝了您的请求！"
+            var relation = {};
+            var message={};
+            relation.myId = data.sendId;
+            relation.friendId = data.receiveId;
+            message["sendId"]=data.sendId;
+            message["receiveId"]=data.receiveId;
+            message["type"]=3;
 
-        var textCss=data.sendId== pid ?"bubble me":"bubble you";
+            if (confirm(data.message)) {
+                relation.status = 1;
+                message["message"]=ok;
+                //发送请求修改好友关系状态，并发送通知消息
+                $.ajax({
+                    url : "http://localhost:8080/passfriendReq",
+                    type :"post",
+                    async : false,
+                    data : {
+                        "str" : JSON.stringify(relation)
+                    },
+                    success : function (resp) {
+                        if(resp){
+                            websocket.send(JSON.stringify(message));
+                        }
+                    }
+                })
+            } else {
+                message["message"]=no;
+                websocket.send(JSON.stringify(message));
+            }
 
-        var str = "<div class='"+textCss+"'>"+ new Date(data.sendTime).Format("yyyy-MM-dd hh:mm:ss") + "<br/>" + data.message +"</div>"
-        $("#message").append(str);
-        scrollToBottom();
-    };
+        }else if(data.type == 3){  //通知消息
+            alert(data.message)
+        }
+
+
+        };
     websocket.onerror = function(event) {
         console.log("WebSocket:发生错误 ");
         // console.log(event);
@@ -32,19 +69,31 @@ $(function () {
         console.log("WebSocket:已关闭");
         // console.log(event);
     }
-    function sendMsg (){
-        var v=$("#content").val();
-        if(v==""){
-            alert("消息内容不能为空！");
-        }else{
+
+
+    function sendMsg (check){
+        if(check == null){  //普通消息
+            var v=$("#content").val();
+            if(v==""){
+                alert("消息内容不能为空！");
+            }else{
+                var data={};
+                data["sendId"]=pid;
+                data["receiveId"]=receiveId;
+                data["message"]=v;
+                data["type"]=0;
+                websocket.send(JSON.stringify(data));
+                scrollToBottom();
+                $("#content").val("");
+            }
+        }else{ //好友验证消息
             var data={};
             data["sendId"]=pid;
-            data["receiveId"]=receiveId;
-            data["message"]=v;
+            data["receiveId"]=check;
+            data["type"]=1;
             websocket.send(JSON.stringify(data));
-            scrollToBottom();
-            $("#content").val("");
         }
+
     }
 
     function scrollToBottom(){
@@ -73,9 +122,8 @@ $(function () {
     }
 
     $("#sendMsg").on("click" , function(){
-        alert("发送")
-        sendMsg ();
-        console.info(receiveId)
+        sendMsg (null);
     })
 
-})
+
+

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
+/**
+ * 测试thymeleaf模板引擎
+ *
+ */
 @Controller
 public class TextController {
 

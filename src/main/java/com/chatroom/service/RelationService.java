@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public interface RelationService {
 
-    public List<Map<String,String>> allFriends(String pid,Integer status);
-    public List<User> getFriends(String pid,Integer status);
+    public List<Map<String,String>> allFriends(String pid);
+    public List<User> getFriends(String pid);
 
     /**
      * 查找好友
@@ -28,5 +28,20 @@ public interface RelationService {
      * @return
      */
     public boolean isFriend(String myPid, String friendId);
+
+    /**
+     * 添加好友关系
+     * @param relation
+     * @return
+     */
+    public boolean addFriendPrem(Relation relation);
+
+    /**
+     * 修改好友关系的状态
+     * @param relation
+     * @return
+     */
+    public boolean updateFriendStatus(Relation relation);
+
 
 }

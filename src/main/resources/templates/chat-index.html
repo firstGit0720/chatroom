@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/reset.min.css" th:href="@{/css/reset.min.css}" />
     <link rel="stylesheet" href="css/style.css" th:href="@{/css/style.css}"/>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
 </head>
 <body>
 
@@ -32,7 +31,8 @@
             <input type="hidden" id="userpid"  th:value="${userpid}" />
             <ul class="people" >
                 <li class="person" th:each="friend ,iterStat : ${firends}" th:onclick="getname([[${friend}]])">
-                    <img th:src="${friend.imgurl}" alt="http://localhost:8080/img/userportrait/default.jpg" /><span class="name" th:text="${friend.pname}"></span>
+                    <img th:src="${friend.imgurl}" alt="http://localhost:8080/img/userportrait/default.jpg" />
+                    <span class="name" th:text="${friend.pname}"></span>
                     <br><span class="name" th:text="${friend.pid}"></span>
                 </li>
             </ul>
@@ -79,8 +79,9 @@
 </div>-->
 <script type="text/javascript">
     var receiveId;
-    var send = $("#userpid").val();
     function getname(user){
+        console.info(user)
+        console.info(pid)
         $("#message").empty()
         $("#showDiv").attr("hidden" , false)
         receiveId = user.pid
@@ -88,28 +89,28 @@
         $("#toUser").append(user.pname)
         //发送ajax请求，获取最近十条的信息
         $.ajax({
-                url : "http://localhost:8080/msg/getMessage",
-                type : "get",
-                async : false,
-                data : {
-                    "sendId": send,
-                    "receiveId" : receiveId
-                },
-                success : function (resp) {
-                    console.info(resp)
-                    //将信息添加到上边
-                    for (var i = 0 ; i < resp.length ; i++){
-                        var divClass = send == resp[i].sendId ? "bubble me" : "bubble you";
-                        var strMessage = "<div class ='" + divClass + "'>" + new Date(resp[i].sendTime).Format("yyyy-MM-dd hh:mm:ss") + "<br>" + resp[i].message + "</div>"
-                        $("#message").append(strMessage)
-                    }
-                    var strTime = "<div class='conversation-start'> <span>"+ new Date().Format("yyyy-MM-dd hh:mm:ss") +"</span></div>"
-                    $("#message").append(strTime)
-                },
-                error : function (err) {
-                    
+            url : "http://localhost:8080/msg/getMessage",
+            type : "get",
+            async : false,
+            data : {
+                "sendId": pid,
+                "receiveId" :receiveId
+            },
+            success : function (resp) {
+                console.info(resp)
+                //将信息添加到上边
+                for (var i = 0 ; i < resp.length ; i++){
+                    var divClass = pid == resp[i].sendId ? "bubble me" : "bubble you";
+                    var strMessage = "<div class ='" + divClass + "'>" + new Date(resp[i].sendTime).Format("yyyy-MM-dd hh:mm:ss") + "<br>" + resp[i].message + "</div>"
+                    $("#message").append(strMessage)
                 }
-            })
+                var strTime = "<div class='conversation-start'> <span>"+ new Date().Format("yyyy-MM-dd hh:mm:ss") +"</span></div>"
+                $("#message").append(strTime)
+            },
+            error : function (err) {
+
+            }
+        })
     }
 
     function updateImg(){
@@ -118,7 +119,6 @@
 
     function searchFriend(){
         var value = $("#searchValue").val();
-        alert(value)
         $.ajax({
             url:"http://localhost:8080/selectfriends",
             type:"get",
@@ -132,11 +132,11 @@
                     alert("查无此人")
                 } else{
                     for(var i = 0; i < resp.length ; i++){
-                       str += "<li class='person'>"+
-                        "<img src='"+resp[i].imgurl+"' style='margin-top: -5px;' />" +
-                        "<span class='name'>"+resp[i].pname+"</span>"+
-                        "(<span class='name'>"+resp[i].pid+"</span> )"+
-                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='addfriend("+resp[i].pid+")'>添加好友</a>"+"</li>"
+                        str += "<li class='person'>"+
+                            "<img src='"+resp[i].imgurl+"' style='margin-top: -5px;' />" +
+                            "<span class='name'>"+resp[i].pname+"</span>"+
+                            "(<span class='name'>"+resp[i].pid+"</span> )"+
+                            "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='addfriend("+resp[i].pid+")'>添加好友</a>"+"</li>"
                     }
                     str += "</ul>"
                     $("#showFriend").empty()
@@ -146,25 +146,28 @@
                 $("#friendDiv").show()
             }
         })
+
+
     }
+    function addfriend (id){
+        sendMsg (id);
+        /*        $.ajax({
+                    url : "http://localhost:8080/addFriend",
+                    type :"post",
+                    async : false,
+                    data :{
+                        "myId" : send,
+                        "friendId" : id
+                    },
+                    success : function (resp) {
+                        alert(resp)
+                    }
+                })
 
-    function addfriend(id){
-        $.ajax({
-            url : "http://localhost:8080/addFriend",
-            type :"post",
-            async : false,
-            data :{
-                "myId" : send,
-                "friendId" : id
-            },
-            success : function (resp) {
-                alert(resp)
-            }
-        })
-
-        alert(id)
+                alert(id)*/
     }
 
 </script>
+<script type="text/javascript"  src="js/webSocket.js" th:src="@{/js/webSocket.js}"></script>
 </body>
 </html>
